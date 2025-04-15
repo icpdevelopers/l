@@ -98,7 +98,7 @@ function buildListingHtml($dirPath, $relativePath) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Directory: {$pathTitle}</title>
-    <link rel="stylesheet" href="/l/assets_78623784/style.css">
+    <link rel="stylesheet" href="/l/assets/style.css">
 </head>
 <body>
     <div class="directory-listing">
