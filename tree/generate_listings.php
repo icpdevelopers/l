@@ -1,10 +1,10 @@
 <?php
 
-$rootDir = __DIR__;
+$rootDir = dirname(__DIR__);
 $listingBaseDir = __DIR__;
 
 function cleanListingDirectory($listingDir) {
-    $keep = ['generate_listings.php', 'README.md', 'assets', 'archives', '.git'];
+    $keep = ['generate_listings.php', 'assets_78623784'];
     $items = scandir($listingDir);
 
     foreach ($items as $item) {
@@ -39,7 +39,9 @@ foreach ($directoryIterator as $path => $dir) {
         $relativePath = ltrim(substr($originalPath, strlen($rootDir)), '/');
 
         // Skip if has index.html or is the listing directory
-        if (file_exists("$originalPath/index.html")) {
+        if (file_exists("$originalPath/index.html") ||
+            strpos($relativePath, 'tree') === 0 ||
+            strpos($relativePath, '.git') === 0) {
             continue;
         }
 
@@ -49,7 +51,7 @@ foreach ($directoryIterator as $path => $dir) {
 
 echo "All listings generated successfully!\n";
 
-function generateDirectoryListing($originalPath, $relativePath) {
+function generateDirectoryListing($originalPath, $relativePath, $isRoot = false) {
     global $listingBaseDir;
 
     // Create mirrored directory
@@ -59,36 +61,37 @@ function generateDirectoryListing($originalPath, $relativePath) {
     }
 
     // Generate HTML
-    $html = buildListingHtml($originalPath, $relativePath);
+    $html = buildListingHtml($originalPath, $relativePath, $isRoot);
     file_put_contents("$mirroredPath/index.html", $html);
 }
 
-function buildListingHtml($dirPath, $relativePath) {
+function buildListingHtml($dirPath, $relativePath,  $isRoot = false) {
     $items = scandir($dirPath);
     $breadcrumbs = generateBreadcrumbs($relativePath);
     $itemList = '';
 
     foreach ($items as $item) {
         if ($item === '.' || $item === '..') continue;
-        if ($item === '.git') continue;
-
+        if ($isRoot && $item === 'tree') continue;
+        if ($isRoot && $item === '.git') continue;
 
         $fullPath = "$dirPath/$item";
         $isDir = is_dir($fullPath);
         $escapedItem = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
+
         if ($isDir) {
             $icon = '📁';
             if (file_exists("$fullPath/index.html")) {
-                $target = "/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
+                $target = "/l/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
             }else{
-                $target = "./$item/";
+                $target = "/l/tree/$item/";
             }
         } else {
             $icon = '📄';
-            $target = ($relativePath ? "/$relativePath/" : '/') . $item;
+            $target = "/l/".($relativePath ? "/$relativePath/" : '/') . $item;
         }
-        echo "target: $target\n";
-        $itemList .= "<li><a href='/l$target'>$icon $escapedItem</a></li>";
+
+        $itemList .= "<li><a href='$target'>$icon $escapedItem</a></li>";
     }
     $pathTitle = $relativePath ?: 'Root';
     return <<<HTML
@@ -98,12 +101,12 @@ function buildListingHtml($dirPath, $relativePath) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Directory: {$pathTitle}</title>
-    <link rel="stylesheet" href="/l/assets/style.css">
+    <link rel="stylesheet" href="/l/tree/assets_78623784/style.css">
 </head>
 <body>
     <div class="directory-listing">
         <header>
-            <h1>📂 <?php echo $relativePath ?? 'Root Directory'; ?></h1>
+            <h1>📂 $pathTitle; ?></h1>
             <div class="breadcrumb">{$breadcrumbs}</div>
         </header>
         <ul class="item-list">{$itemList}</ul>
