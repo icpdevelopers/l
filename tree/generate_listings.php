@@ -132,4 +132,5 @@ function generateBreadcrumbs($path) {
 
     return implode(' / ', $breadcrumbs);
 }
+copy($listingBaseDir.'/index.html',$rootDir.'/index.html');
 ?>
