@@ -84,11 +84,11 @@ function buildListingHtml($dirPath, $relativePath,  $isRoot = false) {
             if (file_exists("$fullPath/index.html")) {
                 $target = "/l/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
             }else{
-                $target = "/l/tree/$item/";
+                $target = "/l/tree/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
             }
         } else {
             $icon = '📄';
-            $target = "/l/".($relativePath ? "/$relativePath/" : '/') . $item;
+            $target = "/l".($relativePath ? "/$relativePath/" : '/') . $item;
         }
 
         $itemList .= "<li><a href='$target'>$icon $escapedItem</a></li>";
@@ -106,7 +106,7 @@ function buildListingHtml($dirPath, $relativePath,  $isRoot = false) {
 <body>
     <div class="directory-listing">
         <header>
-            <h1>📂 $pathTitle; ?></h1>
+            <h1>📂 $pathTitle</h1>
             <div class="breadcrumb">{$breadcrumbs}</div>
         </header>
         <ul class="item-list">{$itemList}</ul>
