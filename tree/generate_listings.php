@@ -82,13 +82,13 @@ function buildListingHtml($dirPath, $relativePath,  $isRoot = false) {
         if ($isDir) {
             $icon = '📁';
             if (file_exists("$fullPath/index.html")) {
-                $target = "/l/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
+                $target = "/projects/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
             }else{
-                $target = "/l/tree/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
+                $target = "/projects/tree/" . ($relativePath ? "$relativePath/" : '') . "$item/"; // Original path
             }
         } else {
             $icon = '📄';
-            $target = "/l".($relativePath ? "/$relativePath/" : '/') . $item;
+            $target = "/projects".($relativePath ? "/$relativePath/" : '/') . $item;
         }
 
         $itemList .= "<li><a href='$target'>$icon $escapedItem</a></li>";
@@ -101,7 +101,7 @@ function buildListingHtml($dirPath, $relativePath,  $isRoot = false) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Directory: {$pathTitle}</title>
-    <link rel="stylesheet" href="/l/tree/assets_78623784/style.css">
+    <link rel="stylesheet" href="/projects/tree/assets_78623784/style.css">
 </head>
 <body>
     <div class="directory-listing">
@@ -117,10 +117,10 @@ HTML;
 }
 
 function generateBreadcrumbs($path) {
-    if (!$path) return '<a href="/l/">Home</a>';
+    if (!$path) return '<a href="/projects/">Home</a>';
 
     $parts = explode('/', $path);
-    $breadcrumbs = ['<a href="/l/">Home</a>'];
+    $breadcrumbs = ['<a href="/projects/">Home</a>'];
     $currentPath = '';
 
     foreach ($parts as $i => $part) {

@@ -1,6 +1,6 @@
 ## create directory map of whole repo.
 
-> since github pages doesn't support directory listing, we use this directory to manually generate the listing and serve index from /l/tree/
+> since github pages doesn't support directory listing, we use php code to manually generate the listing and serve index from /l/tree/
 
 - make sure the listing directories dont have problematic folders like .git and other unwanted files and folders:
 `find . \( -name ".git" -o -name ".vscode" -o -name ".gitignore" \) -prune -exec rm -rf {} \;`
